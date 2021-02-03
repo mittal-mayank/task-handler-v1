@@ -1,0 +1,4 @@
+#ulTasks > .disabled {
+    text-decoration: line-through;
+    pointer-events: unset;
+}
