@@ -31,8 +31,16 @@ $.get('/tasks', (list) => {
     }
 
     for (let entry of list) {
-        ulTasks.append(newTask(entry.task).toggleClass('disabled', entry.checked === 'true'))
+        let initTask = newTask(entry.task)
+        if (entry.checked === 'true') {
+            initTask.toggleClass('disabled')
+            numLineThrough++
+        }
+        ulTasks.append(initTask)
     }
+
+    btnSort.prop('disabled', !numLineThrough)
+    btnClean.prop('disabled', !numLineThrough)
 
     inpNewTask.on('keypress', (event) => {
         if (event.which === 13 && /\S/.test(inpNewTask.val())) {
@@ -73,6 +81,10 @@ $.get('/tasks', (list) => {
         $.ajax({
             url: '/tasks',
             type: 'DELETE',
+            success: () => {
+                btnSort.prop('disabled', true)
+                btnClean.prop('disabled', true)
+            }
         });
     })
 })
