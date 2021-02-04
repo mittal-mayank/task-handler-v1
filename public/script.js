@@ -9,34 +9,36 @@ $.get('/tasks', (list) => {
     let numLineThrough = 0
 
     function newTask(taskVal) {
-        return $(`<li class="list-group-item">${taskVal}</li>`)
-            .on('click', function () {
-                let thisTask = $(this)
-                let checkedVal = thisTask.toggleClass('disabled').hasClass('disabled')
-                $.ajax({
-                    url: '/tasks',
-                    type: 'PUT',
-                    data: {checked: checkedVal.toString(), pos: ulTasks.children().index(thisTask)},
-                    success: () => {
-                        if (checkedVal) {
-                            numLineThrough++
-                        } else {
-                            numLineThrough--
+        let listItem = $('<li>').addClass('list-group-item')
+        return listItem
+            .append($(`<input class="form-check-input me-2 checkTask" type="checkbox"><span>${taskVal}</span>`)
+                .on('change', () => {
+                    let checkedVal = listItem.toggleClass('disabled').hasClass('disabled')
+                    $.ajax({
+                        url: '/tasks',
+                        type: 'PUT',
+                        data: {checked: checkedVal.toString(), pos: ulTasks.children().index(listItem)},
+                        success: () => {
+                            if (checkedVal) {
+                                numLineThrough++
+                            } else {
+                                numLineThrough--
+                            }
+                            btnSort.prop('disabled', !numLineThrough)
+                            btnClean.prop('disabled', !numLineThrough)
                         }
-                        btnSort.prop('disabled', !numLineThrough)
-                        btnClean.prop('disabled', !numLineThrough)
-                    }
-                });
-            })
+                    });
+                }))
     }
 
     for (let entry of list) {
-        let initTask = newTask(entry.task)
+        let listItem = newTask(entry.task)
         if (entry.checked === 'true') {
-            initTask.toggleClass('disabled')
+            listItem.toggleClass('disabled')
+            listItem.find('.checkTask').prop('checked', true)
             numLineThrough++
         }
-        ulTasks.append(initTask)
+        ulTasks.append(listItem)
     }
 
     btnSort.prop('disabled', !numLineThrough)
