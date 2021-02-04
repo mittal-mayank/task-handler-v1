@@ -2,3 +2,9 @@
     text-decoration: line-through;
     pointer-events: unset;
 }
+
+.taskVal {
+    display: inline-block;
+    width: calc(100% - 24px);
+    overflow-wrap: break-word;
+}

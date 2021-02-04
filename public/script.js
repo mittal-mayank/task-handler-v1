@@ -11,7 +11,7 @@ $.get('/tasks', (list) => {
     function newTask(taskVal) {
         let listItem = $('<li>').addClass('list-group-item')
         return listItem
-            .append($(`<input class="form-check-input me-2 checkTask" type="checkbox"><span>${taskVal}</span>`)
+            .append($(`<input class="form-check-input me-2 checkTask" type="checkbox"><span class="taskVal">${taskVal}</span>`)
                 .on('change', () => {
                     let checkedVal = listItem.toggleClass('disabled').hasClass('disabled')
                     $.ajax({
